@@ -6,6 +6,11 @@
     font-family: "Roboto", sans-serif;
 }
 
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
 .video_block {
     padding: 7vh 20vw 0;
 }
