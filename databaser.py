@@ -15,6 +15,11 @@ class Databaser:
                             likes INT,
                             dislikes INT,
                             author_name TEXT)''')
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            username TEXT UNIQUE NOT NULL,
+                            password TEXT NOT NULL,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
         self.connection.commit()
 
     def add_video(self, name, desc, author_name):
@@ -61,6 +66,26 @@ class Databaser:
         videos.sort(key=lambda x: x['likes'] - x['dislikes'], reverse=True)
 
         return videos
+
+
+    def create_user(self, username, password):
+        try:
+            self.cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', 
+                              (username, password))
+            self.connection.commit()
+            return self.cursor.lastrowid
+        except sqlite3.IntegrityError:
+            return None
+    
+    def get_user_by_username(self, username):
+        self.cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+        r = self.cursor.fetchone()
+        return dict(r) if r else None
+    
+    def get_user_by_id(self, user_id):
+        self.cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+        r = self.cursor.fetchone()
+        return dict(r) if r else None
 
 
 if __name__ == '__main__':

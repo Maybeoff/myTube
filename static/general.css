@@ -7,12 +7,67 @@
 }
 
 .header {
-    padding: 3vh;
-    padding-bottom: 0;
+    padding: 2vh 3vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.header a {
+.header > a {
     color: red;
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 500;
+    font-size: 1.5em;
+}
+
+.header-right {
+    display: flex;
+    gap: 1.5vh;
+    align-items: center;
+}
+
+.user-info {
+    color: #333;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.btn-logout, .btn-login, .btn-register, .upload-btn {
+    text-decoration: none;
+    padding: 0.8vh 1.5vh;
+    border-radius: 0.5vh;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-logout {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.btn-logout:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-login {
+    background-color: transparent;
+    color: red;
+    border: 1px solid red;
+}
+
+.btn-login:hover {
+    background-color: #fff5f5;
+}
+
+.btn-register, .upload-btn {
+    background-color: red;
+    color: white;
+}
+
+.btn-register:hover, .upload-btn:hover {
+    background-color: darkred;
 }

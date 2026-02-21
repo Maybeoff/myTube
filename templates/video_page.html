@@ -14,8 +14,12 @@
     </div>
     <div class="video_block">
         <video controls>
+            {% if video.video_format %}
+            <source src="/static/videos/{{ video.id }}.{{ video.video_format }}" type="video/{{ video.video_format }}">
+            {% else %}
             <source src="/static/videos/{{ video.id }}.webm" type="video/webm">
             <source src="/static/videos/{{ video.id }}.mp4" type="video/mp4">
+            {% endif %}
         </video>
 
         <div class="actions">

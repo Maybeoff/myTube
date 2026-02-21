@@ -8,3 +8,9 @@ venv
 .DS_Store
 instance/
 .vscode
+.webm
+.mp4 
+.m3u8
+.ts
+.png
+.jpg

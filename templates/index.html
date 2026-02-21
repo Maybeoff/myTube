@@ -11,59 +11,28 @@
 <body>
     <div class="header">
         <a href="/">myTube</a>
-        <button class="upload-btn" onclick="document.getElementById('uploadModal').style.display='block'">Загрузить видео</button>
-    </div>
-    
-    <div id="uploadModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="document.getElementById('uploadModal').style.display='none'">&times;</span>
-            <h2>Загрузить видео</h2>
-            <form id="uploadForm" enctype="multipart/form-data">
-                <input type="text" name="name" placeholder="Название видео" required>
-                <textarea name="desc" placeholder="Описание" required></textarea>
-                <input type="text" name="author_name" placeholder="Имя автора" required>
-                <input type="file" name="video" accept="video/*" required>
-                <button type="submit">Загрузить</button>
-            </form>
-            <div id="uploadStatus"></div>
+        <div class="header-right">
+            {% if user %}
+                <a href="/upload" class="upload-btn">Загрузить видео</a>
+                <span class="user-info">{{ user.username }}</span>
+                <a href="/logout" class="btn-logout">Выйти</a>
+            {% else %}
+                <a href="/login" class="btn-login">Войти</a>
+                <a href="/register" class="btn-register">Регистрация</a>
+            {% endif %}
         </div>
     </div>
-
+    
     <div class="videos">
         {% for video in videos %}
         <div class="video">
             <a href="/{{ video.id }}">
-                <img src="/static/previews/{{ video.id }}.png" alt="" onerror="this.src='/static/previews/default.png'">
+                <img src="/static/previews/{{ video.id }}.png" alt="" onerror="this.style.display='none'">
                 <h2 class="name">{{ video.name }}</h2>
                 <p class="author_name">{{ video.author_name }}</p>
             </a>
         </div>
         {% endfor %}
     </div>
-
-    <script>
-        document.getElementById('uploadForm').onsubmit = async function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const status = document.getElementById('uploadStatus');
-            status.innerText = 'Загрузка и конвертация...';
-            
-            try {
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    status.innerText = 'Видео успешно загружено!';
-                    setTimeout(() => location.reload(), 1500);
-                } else {
-                    status.innerText = 'Ошибка: ' + (result.error || result.detail);
-                }
-            } catch (error) {
-                status.innerText = 'Ошибка загрузки: ' + error;
-            }
-        };
-    </script>
 </body>
 </html>
