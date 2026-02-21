@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="myTube - платформа для просмотра видео">
     <title>myTube - Главная</title>
+    <script>
+        // Применяем тему до загрузки страницы
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="/static/general.css">
     <link rel="stylesheet" href="/static/index.css">
 </head>
