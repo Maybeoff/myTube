@@ -206,18 +206,37 @@ async def video_page(request: Request, video_id: int):
     
     video["video_format"] = video_format
     user = get_current_user(request)
-    return templates.TemplateResponse("video_page.html", {"request": request, "video": video, "user": user})
+    
+    # Получаем реакцию пользователя на это видео
+    user_reaction = None
+    if user:
+        user_reaction = db.get_user_reaction(user["id"], video_id)
+    
+    return templates.TemplateResponse("video_page.html", {
+        "request": request, 
+        "video": video, 
+        "user": user,
+        "user_reaction": user_reaction
+    })
 
 
 @app.post("/{video_id}/like")
-async def like_video(video_id: int):
-    db.like_video(video_id)
+async def like_video(request: Request, video_id: int):
+    user = get_current_user(request)
+    if not user:
+        return JSONResponse({"error": "Необходима авторизация"}, status_code=401)
+    
+    db.like_video(video_id, user["id"])
     return JSONResponse(content={"status": "ok"})
 
 
 @app.post("/{video_id}/dislike")
-async def dislike_video(video_id: int):
-    db.dislike_video(video_id)
+async def dislike_video(request: Request, video_id: int):
+    user = get_current_user(request)
+    if not user:
+        return JSONResponse({"error": "Необходима авторизация"}, status_code=401)
+    
+    db.dislike_video(video_id, user["id"])
     return JSONResponse(content={"status": "ok"})
 
 

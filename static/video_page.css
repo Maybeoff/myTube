@@ -38,6 +38,15 @@ video {
     background-color: #d3d3d3;
 }
 
+.like_btn.active, .dislike_btn.active {
+    background-color: #2196F3;
+    color: white;
+}
+
+.like_btn.active svg, .dislike_btn.active svg {
+    fill: white;
+}
+
 .like_btn p, .dislike_btn p {
     margin-left: .5vh;
 }
