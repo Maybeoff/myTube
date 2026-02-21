@@ -10,100 +10,79 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2vh;
 }
 
-.upload-btn {
-    background-color: red;
-    color: white;
-    border: none;
+.search-form {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    gap: 1vh;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 1vh 1.5vh;
+    border: 1px solid var(--border-color);
+    border-radius: 2vh;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.95em;
+}
+
+.search-form button {
     padding: 1vh 2vh;
-    border-radius: 0.5vh;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.upload-btn:hover {
-    background-color: darkred;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 3vh;
-    width: 50%;
-    border-radius: 1vh;
-}
-
-.close {
-    float: right;
-    font-size: 2em;
-    cursor: pointer;
-}
-
-#uploadForm input, #uploadForm textarea {
-    width: 100%;
-    padding: 1vh;
-    margin: 1vh 0;
-    border: 1px solid #ccc;
-    border-radius: 0.5vh;
-}
-
-#uploadForm button {
-    background-color: red;
-    color: white;
     border: none;
-    padding: 1vh 2vh;
-    border-radius: 0.5vh;
+    background-color: var(--card-bg);
+    border-radius: 2vh;
     cursor: pointer;
-    margin-top: 1vh;
+    font-size: 1.2em;
 }
 
-#uploadStatus {
-    margin-top: 1vh;
-    color: green;
+.search-form button:hover {
+    background-color: var(--button-hover);
 }
 
 .videos {
     padding: 5vh;
     display: flex;
     flex-wrap: wrap;
+    gap: 2vh;
 }
 
 .video {
     width: 24vw;
-    margin-right: 1vh;
-    margin-bottom: 2vh;
 }
 
 .video a {
     text-decoration: none;
-    color: #000;
-    margin-top: .5vh;
+    color: var(--text-color);
 }
 
 .video a h2 {
-    text-decoration: none;
-    color: #000;
     margin-top: .5vh;
+    font-size: 1.1em;
 }
 
 .video a p {
-    text-decoration: none;
     color: #9e9e9e;
+    font-size: 0.9em;
+    margin-top: 0.3vh;
 }
 
 .video a img {
     width: 100%;
     border-radius: 1vh;
+    background-color: var(--card-bg);
+}
+
+.views {
+    font-size: 0.85em !important;
+}
+
+.no-results {
+    padding: 5vh;
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 1.2em;
 }

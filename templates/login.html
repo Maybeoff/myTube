@@ -10,6 +10,7 @@
 <body>
     <div class="header">
         <a href="/">myTube</a>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
     
     <div class="auth-container">
@@ -71,6 +72,24 @@
                 submitBtn.disabled = false;
             }
         };
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon();
     </script>
 </body>
 </html>
