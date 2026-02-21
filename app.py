@@ -194,6 +194,23 @@ async def upload_video(
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
+@app.get("/studio", response_class=HTMLResponse)
+async def studio(request: Request):
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    
+    videos = db.get_user_videos(user["id"])
+    stats = db.get_user_stats(user["id"])
+    
+    return templates.TemplateResponse("studio.html", {
+        "request": request,
+        "user": user,
+        "videos": videos,
+        "stats": stats
+    })
+
+
 @app.get("/{video_id}", response_class=HTMLResponse)
 async def video_page(request: Request, video_id: int):
     video = db.get_video(video_id)
@@ -323,23 +340,6 @@ async def unsubscribe(request: Request, user_id: int):
     
     db.unsubscribe(user["id"], user_id)
     return JSONResponse({"status": "ok"})
-
-
-@app.get("/studio", response_class=HTMLResponse)
-async def studio(request: Request):
-    user = get_current_user(request)
-    if not user:
-        return RedirectResponse(url="/login", status_code=303)
-    
-    videos = db.get_user_videos(user["id"])
-    stats = db.get_user_stats(user["id"])
-    
-    return templates.TemplateResponse("studio.html", {
-        "request": request,
-        "user": user,
-        "videos": videos,
-        "stats": stats
-    })
 
 
 @app.delete("/video/{video_id}")
