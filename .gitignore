@@ -1,3 +1,10 @@
 __pycache__
 venv
 *.db
+.env
+*.pyc
+*.pyo
+*.log
+.DS_Store
+instance/
+.vscode

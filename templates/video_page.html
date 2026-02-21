@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myTube</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='video_page.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='general.css') }}">
+    <link rel="stylesheet" href="/static/video_page.css">
+    <link rel="stylesheet" href="/static/general.css">
 </head>
 <body>
     <div class="header">
@@ -14,7 +14,8 @@
     </div>
     <div class="video_block">
         <video controls>
-            <source src="{{ url_for('static', filename='videos/' + video.id|string + '.mp4') }}" type="video/mp4">
+            <source src="/static/videos/{{ video.id }}.webm" type="video/webm">
+            <source src="/static/videos/{{ video.id }}.mp4" type="video/mp4">
         </video>
 
         <div class="actions">
@@ -38,25 +39,58 @@
     </div>
 
     <script>
-        like_btn = document.querySelector('.like_btn')
-        like_p = document.querySelector('.like_btn p')
-        like_btn.onclick = async function(event) {
-            await fetch('/' + like_btn.id.toString() + '/like', {
-                method: 'POST'
-            })
-            like_p.innerText = Number(like_p.innerText) + 1
-        }
+        let isLikeProcessing = false;
+        let isDislikeProcessing = false;
 
-        dislike_btn = document.querySelector('.dislike_btn')
-        dislike_p = document.querySelector('.dislike_btn p')
-        dislike_btn.onclick = async function(event) {
-            console.log('/' + dislike_btn.id.toString() + '/dislike');
+        const like_btn = document.querySelector('.like_btn');
+        const like_p = document.querySelector('.like_btn p');
+        
+        like_btn.onclick = async function(event) {
+            if (isLikeProcessing) return;
+            isLikeProcessing = true;
             
-            await fetch('/' + dislike_btn.id.toString() + '/dislike', {
-                method: 'POST'
-            })
-            dislike_p.innerText = Number(dislike_p.innerText) + 1
-        }
+            try {
+                const response = await fetch('/' + like_btn.id.toString() + '/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    like_p.innerText = Number(like_p.innerText) + 1;
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            } finally {
+                setTimeout(() => { isLikeProcessing = false; }, 1000);
+            }
+        };
+
+        const dislike_btn = document.querySelector('.dislike_btn');
+        const dislike_p = document.querySelector('.dislike_btn p');
+        
+        dislike_btn.onclick = async function(event) {
+            if (isDislikeProcessing) return;
+            isDislikeProcessing = true;
+            
+            try {
+                const response = await fetch('/' + dislike_btn.id.toString() + '/dislike', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    dislike_p.innerText = Number(dislike_p.innerText) + 1;
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            } finally {
+                setTimeout(() => { isDislikeProcessing = false; }, 1000);
+            }
+        };
     </script>
 </body>
 </html>

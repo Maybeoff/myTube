@@ -15,11 +15,13 @@ class Databaser:
                             likes INT,
                             dislikes INT,
                             author_name TEXT)''')
+        self.connection.commit()
 
     def add_video(self, name, desc, author_name):
         self.cursor.execute('''INSERT INTO videos (name, desc, likes, dislikes, author_name) 
         VALUES (?, ?, 0, 0, ?)''', (name, desc, author_name))
         self.connection.commit()
+        return self.cursor.lastrowid
 
     def get_video(self, video_id):
         self.cursor.execute('SELECT * FROM videos WHERE id = ?', (video_id,))
@@ -45,9 +47,11 @@ class Databaser:
 
     def like_video(self, video_id):
         self.cursor.execute('UPDATE videos SET likes = likes + 1 WHERE id =?', (video_id,))
+        self.connection.commit()
 
     def dislike_video(self, video_id):
         self.cursor.execute('UPDATE videos SET dislikes = dislikes + 1 WHERE id =?', (video_id,))
+        self.connection.commit()
 
     def get_videos(self):
         self.cursor.execute('SELECT * FROM videos')
