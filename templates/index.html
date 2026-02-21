@@ -25,6 +25,7 @@
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
             {% if user %}
+                <a href="/studio" class="upload-btn">Студия</a>
                 <a href="/upload" class="upload-btn">Загрузить видео</a>
                 <a href="/user/{{ user.id }}" class="user-info">{{ user.username }}</a>
                 <a href="/logout" class="btn-logout">Выйти</a>

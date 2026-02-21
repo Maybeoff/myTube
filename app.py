@@ -325,6 +325,65 @@ async def unsubscribe(request: Request, user_id: int):
     return JSONResponse({"status": "ok"})
 
 
+@app.get("/studio", response_class=HTMLResponse)
+async def studio(request: Request):
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    
+    videos = db.get_user_videos(user["id"])
+    stats = db.get_user_stats(user["id"])
+    
+    return templates.TemplateResponse("studio.html", {
+        "request": request,
+        "user": user,
+        "videos": videos,
+        "stats": stats
+    })
+
+
+@app.delete("/video/{video_id}")
+async def delete_video(request: Request, video_id: int):
+    user = get_current_user(request)
+    if not user:
+        return JSONResponse({"error": "Необходима авторизация"}, status_code=401)
+    
+    success = db.delete_video(video_id, user["id"])
+    if not success:
+        return JSONResponse({"error": "Видео не найдено или вы не можете его удалить"}, status_code=403)
+    
+    # Удаляем файлы видео и превью
+    import os
+    video_dir = Path("static/videos")
+    for file in video_dir.glob(f"{video_id}.*"):
+        try:
+            os.remove(file)
+        except:
+            pass
+    
+    preview_path = f"static/previews/{video_id}.png"
+    if os.path.exists(preview_path):
+        try:
+            os.remove(preview_path)
+        except:
+            pass
+    
+    return JSONResponse({"status": "ok"})
+
+
+@app.post("/video/{video_id}/edit")
+async def edit_video(request: Request, video_id: int, name: str = Form(...), desc: str = Form(...)):
+    user = get_current_user(request)
+    if not user:
+        return JSONResponse({"error": "Необходима авторизация"}, status_code=401)
+    
+    success = db.update_video(video_id, user["id"], name, desc)
+    if not success:
+        return JSONResponse({"error": "Видео не найдено или вы не можете его редактировать"}, status_code=403)
+    
+    return JSONResponse({"status": "ok"})
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=5000)

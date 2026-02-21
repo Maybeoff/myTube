@@ -214,9 +214,25 @@ class Databaser:
         self.cursor.execute('SELECT COUNT(*) as count FROM subscriptions WHERE channel_id = ?', (user_id,))
         return self.cursor.fetchone()['count']
 
-    def get_subscription_count(self, user_id):
-        self.cursor.execute('SELECT COUNT(*) as count FROM subscriptions WHERE subscriber_id = ?', (user_id,))
-        return self.cursor.fetchone()['count']
+    def delete_video(self, video_id, user_id):
+        """Удалить видео если пользователь владелец"""
+        self.cursor.execute('DELETE FROM videos WHERE id = ? AND author_id = ?', (video_id, user_id))
+        self.connection.commit()
+        return self.cursor.rowcount > 0
+
+    def update_video(self, video_id, user_id, name=None, desc=None):
+        """Обновить информацию о видео"""
+        video = self.get_video(video_id)
+        if not video or video['author_id'] != user_id:
+            return False
+        
+        if name is not None:
+            self.cursor.execute('UPDATE videos SET name = ? WHERE id = ?', (name, video_id))
+        if desc is not None:
+            self.cursor.execute('UPDATE videos SET desc = ? WHERE id = ?', (desc, video_id))
+        
+        self.connection.commit()
+        return True
 
 
 if __name__ == '__main__':
