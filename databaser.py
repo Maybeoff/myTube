@@ -214,6 +214,10 @@ class Databaser:
         self.cursor.execute('SELECT COUNT(*) as count FROM subscriptions WHERE channel_id = ?', (user_id,))
         return self.cursor.fetchone()['count']
 
+    def get_subscription_count(self, user_id):
+        self.cursor.execute('SELECT COUNT(*) as count FROM subscriptions WHERE subscriber_id = ?', (user_id,))
+        return self.cursor.fetchone()['count']
+
     def delete_video(self, video_id, user_id):
         """Удалить видео если пользователь владелец"""
         self.cursor.execute('DELETE FROM videos WHERE id = ? AND author_id = ?', (video_id, user_id))
